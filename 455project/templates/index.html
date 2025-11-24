@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Project 6: Simple Operations AES-128</h2>
+
+<p>Enter a plaintext (UTF-8) or ciphertext (hex) and a 128-bit key (32 hex characters). Choose Encrypt or Decrypt.</p>
+
+{% if error %}
+<div class="error-box"><strong>Error:</strong> {{ error }}</div>
+{% endif %}
+
+<form method="POST">
+    <div class="form-group-operation">
+        <label><strong>Operation:</strong></label><br>
+        <input type="radio" name="mode" value="encrypt" checked> Encrypt<br>
+        <input type="radio" name="mode" value="decrypt"> Decrypt<br>
+    </div>
+
+    <div class="form-group">
+        <label><strong>Input (plain/cipher):</strong></label>
+        <input type="text" name="plaintext" value="{{ input_plaintext }}">
+    </div>
+
+    <div class="form-group">
+        <label><strong>Key (32 hex chars):</strong></label>
+        <input type="text" name="key" value="{{ input_key }}">
+    </div>
+
+    <div class="button-group">
+        <button type="submit" class="btn-encrypt">Run</button>
+        <button type="button" onclick="example()" class="btn-example">Try Example</button>
+    </div>
+</form>
+
+<script>
+function example() {
+    document.querySelector("input[name='plaintext']").value = "hello it is EECE455 project";
+    document.querySelector("input[name='key']").value = "000102030405060708090A0B0C0D0E0F";
+    document.querySelector("input[value='encrypt']").checked = true;
+}
+</script>
+
+{% if result %}
+<hr>
+
+<div class="results-section">
+    <div class="ciphertext-box">
+        <h2>Output</h2>
+        <p class="ciphertext" style="word-break: break-all;">
+            <strong>{{ result.label }}:</strong> {{ result.output }}
+        </p>
+    </div>
+
+    <h3>Blocks (click to expand)</h3>
+
+    {% for block in result.blocks %}
+    <details class="block-details" style="margin-bottom: 1.5rem; padding: 1.5rem; border: 1px solid #ccc; border-radius: 8px; background: #fafafa;">
+        <summary style="cursor: pointer; font-weight: 700; font-size: 1.1rem;">
+            Block {{ block.index }}
+            &nbsp; | &nbsp;
+            Input: {{ block.input_block }}
+            &nbsp; | &nbsp;
+            Output: {{ block.output_block }}
+        </summary>
+
+        <div class="rounds-wrapper" style="margin-top: 1.5rem;">
+            {% for round_data in block.rounds %}
+            <div class="round-container">
+                <h4>Round {{ round_data.round_num }}</h4>
+
+                <div class="round-content">
+                    
+                    <div class="round-state">
+                        <strong>State</strong><br>
+                        <table class="state-table">
+                            {% for row in round_data.state %}
+                            <tr>
+                                {% for cell in row %}
+                                <td>{{ cell }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+
+                    <div class="round-key">
+                        <strong>Round Key</strong><br>
+                        <table class="state-table">
+                            {% for row in round_data.key %}
+                            <tr>
+                                {% for cell in row %}
+                                <td>{{ cell }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </details>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}

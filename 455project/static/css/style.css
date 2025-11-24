@@ -1,0 +1,271 @@
+/* GLOBAL RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* BODY AND LAYOUT */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+main {
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* HEADINGS (MODIFIED FOR BIGGER/MODERN LOOK) */
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+    text-align: center;
+}
+
+/* PROJECT TITLE (H2) - MADE LARGER AND MORE PROMINENT */
+h2 {
+    font-size: 2.2rem; /* Increased from 1.8rem */
+    margin-top: 2rem;
+    margin-bottom: 1.5rem; 
+    color: #0056b3; /* Slightly darker primary color */
+    border-bottom: 3px solid #007bff; /* Thicker border */
+    padding-bottom: 0.75rem; /* More padding */
+}
+
+h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+    color: #005a99;
+}
+
+h4 {
+    font-size: 1rem;
+    margin-bottom: 0.6rem;
+    color: #333;
+}
+
+.description {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    color: #666;
+}
+
+/* FORM STYLING */
+.form-section {
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* NEW CLASS for operation radio buttons to increase text size */
+.form-group-operation {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem; 
+}
+
+/* LABELS - MADE BOLDER AND SLIGHTLY LARGER */
+label {
+    display: block;
+    margin-bottom: 0.75rem; /* Increased spacing */
+    font-weight: 700; /* Bolder */
+    font-size: 1.1rem; /* Slightly larger text */
+    color: #1a1a1a;
+}
+
+/* INPUTS (TEXTAREA, TEXT) - MADE TALLER AND BOLDER */
+textarea, input[type="text"] {
+    width: 100%;
+    padding: 1rem; /* Increased padding from 0.75rem */
+    border: 2px solid #ddd; /* Slightly thicker border */
+    border-radius: 8px; /* More rounded corners */
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem; /* Increased font size */
+    resize: vertical;
+}
+
+textarea:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* BUTTON GROUP */
+.button-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1rem; /* Added spacing above buttons */
+}
+
+/* BUTTONS - MADE BIGGER AND BOLDER */
+.btn-encrypt {
+    background-color: #007bff;
+    color: white;
+    padding: 1rem 2.5rem; /* Increased padding */
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem; /* Increased font size */
+    font-weight: 700; /* Bolder text */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.btn-encrypt:hover {
+    background-color: #0056b3;
+}
+
+.btn-encrypt:active {
+    transform: scale(0.98);
+}
+
+/* EXAMPLE BUTTON - MADE BIGGER AND BOLDER */
+.btn-example {
+    background-color: #6c757d;
+    color: white;
+    padding: 1rem 2.5rem; /* Increased padding */
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem; /* Increased font size */
+    font-weight: 700; /* Bolder text */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.btn-example:hover {
+    background-color: #5a6268;
+}
+
+.btn-example:active {
+    transform: scale(0.98);
+}
+
+/* ERROR BOX */
+.error-box {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #f5c6cb;
+}
+
+/* RESULTS SECTION */
+.results-section {
+    margin-top: 3rem;
+}
+
+/* CIPHERTEXT BOX - MODERNIZED AND PROMINENT */
+.ciphertext-box {
+    background-color: #e6f7ff; /* Lighter blue/cyan background */
+    padding: 2rem; /* More internal space */
+    border-radius: 10px; /* More rounded */
+    margin-bottom: 2.5rem;
+    border-left: 6px solid #007bff; /* Thicker, blue border */
+}
+
+.ciphertext-box h2 {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #007bff; /* Use primary blue for consistency */
+    font-size: 1.8rem; /* Slightly smaller than main H2 */
+}
+
+/* CIPHERTEXT/PLAINTEXT OUTPUT - MADE LARGER */
+.ciphertext {
+    font-family: 'Courier New', monospace;
+    font-size: 1.3rem; /* Larger output text */
+    word-break: break-all;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 4px;
+    display: block;
+    border: 1px solid #ddd;
+}
+
+/* ROUND CONTAINER */
+.round-container {
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: 8px; /* Slightly more rounded */
+    border: 1px solid #e0e0e0;
+}
+
+.round-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.round-state, .round-key {
+    display: flex;
+    flex-direction: column;
+}
+
+/* STATE TABLE */
+.state-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+    background-color: white;
+    border: 1px solid #ccc;
+}
+
+.state-table td {
+    width: 25%;
+    padding: 0.75rem;
+    text-align: center;
+    border: 1px solid #ccc;
+    font-weight: 600;
+    color: #0066cc;
+}
+
+.state-table tr:nth-child(even) td {
+    background-color: #f5f5f5;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .round-content {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .state-table td {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    /* Smaller padding for small screens */
+    .btn-encrypt, .btn-example {
+        padding: 0.75rem 1.5rem;
+    }
+}
