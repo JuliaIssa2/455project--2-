@@ -2,34 +2,50 @@
 
 {% block content %}
 
-<h2>Project 6: Simple Operations AES-128</h2>
-
-<p>Enter a plaintext (UTF-8) or ciphertext (hex) and a 128-bit key (32 hex characters). Choose Encrypt or Decrypt.</p>
+<h2 class="mb-3">AES-128 Simple Operations</h2>
+<p class="text-muted">Encrypt or decrypt using a 128-bit (32 hex char) key.</p>
 
 {% if error %}
-<div class="error-box"><strong>Error:</strong> {{ error }}</div>
+<div class="alert alert-danger"><strong>Error:</strong> {{ error }}</div>
 {% endif %}
 
-<form method="POST">
-    <div class="form-group-operation">
-        <label><strong>Operation:</strong></label><br>
-        <input type="radio" name="mode" value="encrypt" checked> Encrypt<br>
-        <input type="radio" name="mode" value="decrypt"> Decrypt<br>
+<form method="POST" class="card shadow p-4 mb-4">
+
+    <!-- Operation -->
+    <label class="fw-bold mb-2">Operation:</label>
+    <div class="mb-3">
+        <input type="radio" name="mode" value="encrypt" id="menc"
+            {% if mode is not defined or mode == 'encrypt' %}checked{% endif %}>
+        <label for="menc"> Encrypt</label>
+        &nbsp;&nbsp;
+        <input type="radio" name="mode" value="decrypt" id="mdec"
+            {% if mode == 'decrypt' %}checked{% endif %}>
+        <label for="mdec"> Decrypt</label>
     </div>
 
-    <div class="form-group">
-        <label><strong>Input (plain/cipher):</strong></label>
-        <input type="text" name="plaintext" value="{{ input_plaintext }}">
+    <!-- Input -->
+    <div class="mb-3">
+        <label class="fw-bold">Input (plaintext or hex ciphertext):</label>
+        <input type="text" class="form-control" name="plaintext" value="{{ input_plaintext }}">
     </div>
 
-    <div class="form-group">
-        <label><strong>Key (32 hex chars):</strong></label>
-        <input type="text" name="key" value="{{ input_key }}">
+    <!-- Key -->
+    <div class="mb-3">
+        <label class="fw-bold">Key (32 hex chars):</label>
+        <div class="input-group">
+            <input type="text" class="form-control" name="key" id="keyField" value="{{ input_key }}">
+            <button type="button" class="btn btn-secondary" onclick="generateKey()" title="Generate random 128-bit key (hex)">
+                <i class="fa-solid fa-wand-sparkles"></i>
+            </button>
+            <button type="button" class="btn btn-outline-primary" onclick="copyKey()" title="Copy key to clipboard">
+                <i class="fa-regular fa-copy"></i>
+            </button>
+        </div>
     </div>
 
-    <div class="button-group">
-        <button type="submit" class="btn-encrypt">Run</button>
-        <button type="button" onclick="example()" class="btn-example">Try Example</button>
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Run</button>
+        <button type="button" class="btn btn-info" onclick="example()">Try Example</button>
     </div>
 </form>
 
@@ -37,71 +53,94 @@
 function example() {
     document.querySelector("input[name='plaintext']").value = "hello it is EECE455 project";
     document.querySelector("input[name='key']").value = "000102030405060708090A0B0C0D0E0F";
-    document.querySelector("input[value='encrypt']").checked = true;
+    document.getElementById('menc').checked = true;
+}
+
+function generateKey() {
+    const hex = "0123456789ABCDEF";
+    let key = "";
+    for (let i = 0; i < 32; i++) key += hex[Math.floor(Math.random() * 16)];
+    document.getElementById("keyField").value = key;
+}
+
+function copyKey() {
+    navigator.clipboard.writeText(document.getElementById("keyField").value)
+        .then(() => {/* optionally show feedback */})
+        .catch(()=>{/* ignore */});
 }
 </script>
 
 {% if result %}
 <hr>
+<h3 class="mt-4">Result</h3>
 
-<div class="results-section">
-    <div class="ciphertext-box">
-        <h2>Output</h2>
-        <p class="ciphertext" style="word-break: break-all;">
-            <strong>{{ result.label }}:</strong> {{ result.output }}
-        </p>
-    </div>
+<div class="alert alert-success d-flex justify-content-between align-items-center">
+    <div><strong>{{ result.label }}:</strong> <span class="ciphertext">{{ result.output }}</span></div>
+    <button class="btn btn-outline-dark btn-sm" onclick="copyOutput()" title="Copy output">
+        <i class="fa-regular fa-copy"></i>
+    </button>
+</div>
 
-    <h3>Blocks (click to expand)</h3>
+<script>
+function copyOutput() {
+    navigator.clipboard.writeText(`{{ result.output }}`).catch(()=>{});
+}
+</script>
 
+<h4 class="mt-4">AES Blocks (click to expand)</h4>
+
+<div class="accordion" id="aesAccordion">
     {% for block in result.blocks %}
-    <details class="block-details" style="margin-bottom: 1.5rem; padding: 1.5rem; border: 1px solid #ccc; border-radius: 8px; background: #fafafa;">
-        <summary style="cursor: pointer; font-weight: 700; font-size: 1.1rem;">
-            Block {{ block.index }}
-            &nbsp; | &nbsp;
-            Input: {{ block.input_block }}
-            &nbsp; | &nbsp;
-            Output: {{ block.output_block }}
-        </summary>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="heading{{ loop.index }}">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#block{{ loop.index }}">
+                Block {{ block.index }} — Input: {{ block.input_block }} — Output: {{ block.output_block }}
+            </button>
+        </h2>
 
-        <div class="rounds-wrapper" style="margin-top: 1.5rem;">
-            {% for round_data in block.rounds %}
-            <div class="round-container">
-                <h4>Round {{ round_data.round_num }}</h4>
-
-                <div class="round-content">
-                    
-                    <div class="round-state">
-                        <strong>State</strong><br>
-                        <table class="state-table">
-                            {% for row in round_data.state %}
-                            <tr>
-                                {% for cell in row %}
-                                <td>{{ cell }}</td>
-                                {% endfor %}
-                            </tr>
-                            {% endfor %}
-                        </table>
+        <div id="block{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#aesAccordion">
+            <div class="accordion-body">
+                {% for round_data in block.rounds %}
+                <div class="border rounded p-3 mb-3">
+                    <div class="d-flex align-items-center mb-2">
+                        <strong class="me-2">Round {{ round_data.round_num }}</strong>
+                        <span class="text-info" data-bs-toggle="tooltip" title="AES round: SubBytes → ShiftRows → MixColumns → AddRoundKey">
+                            <i class="fa-solid fa-circle-info"></i>
+                        </span>
                     </div>
 
-                    <div class="round-key">
-                        <strong>Round Key</strong><br>
-                        <table class="state-table">
-                            {% for row in round_data.key %}
-                            <tr>
-                                {% for cell in row %}
-                                <td>{{ cell }}</td>
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <strong>State</strong>
+                            <table class="table table-bordered small state-table">
+                                {% for row in round_data.state %}
+                                <tr>
+                                    {% for cell in row %}
+                                    <td>{{ cell }}</td>
+                                    {% endfor %}
+                                </tr>
                                 {% endfor %}
-                            </tr>
-                            {% endfor %}
-                        </table>
+                            </table>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Round Key</strong>
+                            <table class="table table-bordered small state-table">
+                                {% for row in round_data.key %}
+                                <tr>
+                                    {% for cell in row %}
+                                    <td>{{ cell }}</td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
                     </div>
-                    
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
-    </details>
+    </div>
     {% endfor %}
 </div>
 {% endif %}
